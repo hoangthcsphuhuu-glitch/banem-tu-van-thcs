@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="50%" stop-color="#7C3AED" />
+      <stop offset="100%" stop-color="#EC4899" />
+    </linearGradient>
+    <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#F97316" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="115" fill="url(#bgGrad)" />
+  <circle cx="256" cy="256" r="190" fill="rgba(255,255,255,0.12)" />
+  <!-- Friendly Cloud / Chat Bubble Counselor "Mây" -->
+  <path d="M140 280 C110 280 90 255 95 225 C100 198 125 182 150 185 C165 140 215 115 268 122 C320 128 360 168 365 215 C395 220 415 245 410 275 C405 305 380 322 348 322 L210 322 L155 362 L162 322 L140 322 Z" fill="#FFFFFF" />
+  <!-- Cute smiling eyes -->
+  <path d="M195 232 Q210 215 225 232" stroke="#4F46E5" stroke-width="10" stroke-linecap="round" fill="none" />
+  <path d="M285 232 Q300 215 315 232" stroke="#4F46E5" stroke-width="10" stroke-linecap="round" fill="none" />
+  <!-- Rosy cheeks -->
+  <ellipse cx="182" cy="252" rx="14" ry="8" fill="#F472B6" opacity="0.6" />
+  <ellipse cx="328" cy="252" rx="14" ry="8" fill="#F472B6" opacity="0.6" />
+  <!-- Warm smile -->
+  <path d="M232 256 Q256 280 280 256" stroke="#4F46E5" stroke-width="10" stroke-linecap="round" fill="none" />
+  <!-- Heart badge -->
+  <path d="M370 140 C355 122 325 128 325 154 C325 178 370 202 370 214 C370 202 415 178 415 154 C415 128 385 122 370 140 Z" fill="url(#heartGrad)" />
+  <!-- Age badge 13-15 -->
+  <rect x="146" y="382" width="220" height="58" rx="29" fill="rgba(255,255,255,0.95)" />
+  <text x="256" y="420" font-family="Arial, sans-serif" font-weight="bold" font-size="30" fill="#4F46E5" text-anchor="middle">THCS 13-15</text>
+</svg>

@@ -1,0 +1,9 @@
+{
+  "appId": "vn.edu.thcs.trolytuvan",
+  "appName": "Bạn Đồng Hành THCS (13-15)",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}

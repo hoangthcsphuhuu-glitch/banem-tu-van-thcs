@@ -1,0 +1,19 @@
+{
+  "name": "tro-ly-tu-van-hoc-sinh-thcs",
+  "version": "1.0.0",
+  "description": "Trợ lý tư vấn tâm lý, kỹ năng sống và định hướng học tập dành cho học sinh THCS (13, 14, 15 tuổi)",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve www -l 3000",
+    "sync": "npx cap sync android"
+  },
+  "keywords": [
+    "thcs",
+    "tu-van-tam-ly",
+    "hoc-sinh-13-14-15",
+    "pwa",
+    "android"
+  ],
+  "author": "Trợ Lý Học Đường THCS",
+  "license": "MIT"
+}

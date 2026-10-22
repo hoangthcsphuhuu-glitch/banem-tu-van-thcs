@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#4F46E5" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>banem - Trợ Lý Tư Vấn Học Sinh THCS (13-15 Tuổi)</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./assets/icon.svg" />
+  <link rel="apple-touch-icon" href="./assets/icon-192.png" />
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="brand-info" onclick="switchTab('home')">
+        <div class="brand-avatar">🤖</div>
+        <div class="brand-text">
+          <h1>Chatbot banem • THCS</h1>
+          <p id="header-subtitle"><span class="status-dot"></span> Đồng hành Lớp 8 (14 tuổi)</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="sos-top-btn" onclick="openModal('modal-sos')" title="Hỗ trợ khẩn cấp SOS">
+          🚨 SOS
+        </button>
+        <button class="icon-btn" id="btn-theme-toggle" onclick="toggleTheme()" title="Đổi giao diện Sáng/Tối">
+          🌙
+        </button>
+        <button class="icon-btn" onclick="openModal('modal-settings')" title="Cài đặt Hồ sơ & AI">
+          ⚙️
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Views -->
+    <main class="main-content">
+      <!-- TAB 1: HOME -->
+      <section id="tab-home" class="tab-panel active">
+        <div class="hero-card">
+          <div class="hero-top">
+            <div class="hero-greeting">
+              <h2>Chào <span id="hero-name">Bạn nhỏ</span>! 👋</h2>
+              <p>Hôm nay ở trường của cậu thế nào?</p>
+            </div>
+            <span id="hero-grade-badge" style="background:rgba(255,255,255,0.22);padding:4px 10px;border-radius:99px;font-size:11.5px;font-weight:700;white-space:nowrap;">
+              14 Tuổi • Lớp 8
+            </span>
+          </div>
+
+          <!-- Age Switcher 13 - 14 - 15 -->
+          <div style="font-size:11.5px;opacity:0.9;margin-bottom:4px;">Chọn độ tuổi của cậu để cá nhân hóa nội dung tư vấn:</div>
+          <div class="age-pill-selector">
+            <button class="age-pill" data-age="13" onclick="selectAge(13)">🌱 13 Tuổi (Lớp 7)</button>
+            <button class="age-pill active" data-age="14" onclick="selectAge(14)">⚡ 14 Tuổi (Lớp 8)</button>
+            <button class="age-pill" data-age="15" onclick="selectAge(15)">🎯 15 Tuổi (Lớp 9)</button>
+          </div>
+
+          <div class="daily-quote-box">
+            <span id="daily-quote-text">"Mỗi ngày tiến bộ 1% đã là một chiến thắng lớn!"</span>
+            <button class="icon-btn" style="width:30px;height:30px;flex-shrink:0;" onclick="refreshDailyQuote()" title="Đổi thông điệp">🔄</button>
+          </div>
+        </div>
+
+        <!-- Quick Mood Check-In -->
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong style="font-size:14.5px;">🎭 Ngay lúc này, cậu cảm thấy thế nào?</strong>
+            <span style="font-size:11.5px;color:var(--primary);cursor:pointer;font-weight:600;" onclick="switchTab('mood')">Nhật ký ➔</span>
+          </div>
+          <div class="mood-row">
+            <button class="mood-btn" data-score="5" onclick="quickMoodCheckIn(5, '🤩', 'Hào hứng')">
+              <span class="emoji">🤩</span>
+              <span class="label">Hào hứng</span>
+            </button>
+            <button class="mood-btn" data-score="4" onclick="quickMoodCheckIn(4, '😊', 'Vui vẻ')">
+              <span class="emoji">😊</span>
+              <span class="label">Vui vẻ</span>
+            </button>
+            <button class="mood-btn" data-score="3" onclick="quickMoodCheckIn(3, '😐', 'Bình thường')">
+              <span class="emoji">😐</span>
+              <span class="label">Ổn</span>
+            </button>
+            <button class="mood-btn" data-score="2" onclick="quickMoodCheckIn(2, '😟', 'Lo lắng')">
+              <span class="emoji">😟</span>
+              <span class="label">Lo lắng</span>
+            </button>
+            <button class="mood-btn" data-score="1" onclick="quickMoodCheckIn(1, '😢', 'Buồn bã')">
+              <span class="emoji">😢</span>
+              <span class="label">Buồn</span>
+            </button>
+            <button class="mood-btn" data-score="0" onclick="quickMoodCheckIn(0, '🤯', 'Áp lực')">
+              <span class="emoji">🤯</span>
+              <span class="label">Áp lực</span>
+            </button>
+          </div>
+          <div id="home-mood-feedback" style="display:none;margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--bg-subtle);font-size:13px;"></div>
+        </div>
+
+        <!-- Age Focus Card -->
+        <div class="age-focus-card">
+          <div class="age-focus-header">
+            <span>🧭</span>
+            <span id="age-focus-title">Tuổi 14 (Lớp 8) - Khẳng định Bản thân</span>
+          </div>
+          <p id="age-focus-summary" style="font-size:13px;color:var(--text-main);line-height:1.45;"></p>
+          <div id="age-focus-tags" class="age-focus-tags"></div>
+        </div>
+
+        <!-- Main Feature Shortcuts -->
+        <div class="section-title">
+          <span>✨ Khám phá Góc Tư vấn THCS</span>
+        </div>
+        <div class="feature-grid">
+          <div class="feature-item" onclick="switchTab('chat')">
+            <div class="feature-icon" style="background:rgba(79,70,229,0.12);color:#4f46e5;">💬</div>
+            <h3>Tâm sự cùng banem</h3>
+            <p>Lắng nghe 24/7 chuyện học tập, gia đình, tuổi dậy thì kín đáo</p>
+          </div>
+          <div class="feature-item" onclick="switchTab('quiz')">
+            <div class="feature-icon" style="background:rgba(236,72,153,0.12);color:#ec4899;">🎯</div>
+            <h3>Trắc nghiệm & Hướng nghiệp</h3>
+            <p>Chọn tổ hợp Lớp 10, phân luồng sau THCS & đo mức độ Stress</p>
+          </div>
+          <div class="feature-item" onclick="switchTab('mood');switchMoodSubTab('relax')">
+            <div class="feature-icon" style="background:rgba(16,185,129,0.12);color:#10b981;">🧘</div>
+            <h3>Góc Chữa lành & Ôn thi</h3>
+            <p>Thở 4-7-8 giảm run phòng thi, đồng hồ Pomodoro 25p</p>
+          </div>
+          <div class="feature-item" onclick="switchTab('handbook')">
+            <div class="feature-icon" style="background:rgba(245,158,11,0.14);color:#f59e0b;">📖</div>
+            <h3>Tình huống Tuổi 13-15</h3>
+            <p>Kỹ năng phòng chống bắt nạt mạng, ứng xử gia đình & bạn bè</p>
+          </div>
+        </div>
+
+        <!-- Android APK & PWA Download Card -->
+        <div class="card" style="background:linear-gradient(135deg, rgba(79,70,229,0.09), rgba(16,185,129,0.09));border-color:rgba(79,70,229,0.25);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span style="font-size:26px;">📲</span>
+            <div>
+              <h3 style="font-size:14.5px;font-weight:800;">Cài đặt Ứng dụng banem lên Điện thoại Android</h3>
+              <p style="font-size:12px;color:var(--text-muted);">Sử dụng mượt mà cả khi không có kết nối Internet (Offline)</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+            <a href="./TroLyTuVanTHCS-Android.apk" download="TroLyTuVanTHCS-Android.apk" class="btn-primary" style="flex:1;text-decoration:none;text-align:center;">
+              📥 Tải File APK Android
+            </a>
+            <button class="btn-secondary" style="flex:1;" onclick="installPWA()">
+              ⚡ Cài nhanh Web App (PWA)
+            </button>
+          </div>
+        </div>
+
+        <!-- Direct Teacher Counseling Mailbox (THCS Phú Hữu) -->
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <span style="font-size:24px;">📩</span>
+            <div>
+              <h3 style="font-size:14.5px;font-weight:800;">Hộp thư Tư vấn Học đường - THCS Phú Hữu</h3>
+              <p style="font-size:12px;color:var(--text-muted);">Gửi tâm sự hoặc đặt lịch gặp trực tiếp Thầy/Cô tư vấn (hoangthcsphuhuu@gmail.com)</p>
+            </div>
+          </div>
+          <input type="text" id="mail-student-info" class="input-field" placeholder="Tên & Lớp của em (hoặc ghi 'Ẩn danh' nếu ngại)..." />
+          <textarea id="mail-student-content" rows="2" class="textarea-field" placeholder="Điều em muốn nhờ Thầy/Cô lắng nghe và hỗ trợ..."></textarea>
+          <button class="btn-primary" style="width:100%;margin-top:10px;" onclick="sendCounselingEmail()">
+            ✉️ Gửi Tâm sự tới Email Thầy/Cô Tư vấn
+          </button>
+        </div>
+      </section>
+
+      <!-- TAB 2: CHAT COUNSELOR -->
+      <section id="tab-chat" class="tab-panel">
+        <div class="chat-wrapper">
+          <div class="chat-toolbar">
+            <div class="persona-switch">
+              <button class="persona-btn active" data-persona="may" onclick="selectPersona('may')">
+                🤖 Chatbot banem (Mình - Cậu)
+              </button>
+              <button class="persona-btn" data-persona="expert" onclick="selectPersona('expert')">
+                👩‍🏫 Chuyên gia (Anh/Chị - Em)
+              </button>
+            </div>
+            <button class="icon-btn" style="background:var(--bg-subtle);color:var(--text-main);width:32px;height:32px;" onclick="clearChatHistory()" title="Xóa lịch sử trò chuyện">
+              🗑️
+            </button>
+          </div>
+
+          <div id="chat-quick-prompts" class="chat-quick-prompts"></div>
+
+          <div id="chat-messages" class="chat-messages"></div>
+
+          <div class="chat-input-bar">
+            <input type="text" id="chat-input" placeholder="Nhập điều cậu đang trăn trở (VD: áp lực thi lớp 10, buồn chuyện bạn bè...)" autocomplete="off" />
+            <button class="send-btn" onclick="sendChatMessage()" title="Gửi tin nhắn">➤</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: MOOD TRACKER & HEALING -->
+      <section id="tab-mood" class="tab-panel">
+        <div class="sub-tabs">
+          <button class="sub-tab-btn active" data-sub="diary" onclick="switchMoodSubTab('diary')">📔 Nhật ký Cảm xúc</button>
+          <button class="sub-tab-btn" data-sub="relax" onclick="switchMoodSubTab('relax')">🌬️ Thở 4-7-8</button>
+          <button class="sub-tab-btn" data-sub="focus" onclick="switchMoodSubTab('focus')">⏱️ Pomodoro & Vũ trụ</button>
+        </div>
+
+        <!-- Sub-panel 1: Diary -->
+        <div id="mood-sub-diary" class="mood-subpanel">
+          <div id="diary-locked-view" class="card" style="display:none;text-align:center;padding:24px;">
+            <div style="font-size:38px;margin-bottom:8px;">🔒</div>
+            <h3>Nhật ký Riêng tư đã khóa PIN</h3>
+            <p style="font-size:13px;color:var(--text-muted);margin:6px 0 14px;">Nhập mã PIN bảo mật của cậu để xem nhật ký:</p>
+            <input type="password" id="pin-unlock-input" class="input-field" style="max-width:200px;text-align:center;margin:0 auto 12px;display:block;" placeholder="Nhập mã PIN..." />
+            <button class="btn-primary" onclick="unlockDiaryWithPin()">Mở khóa Nhật ký</button>
+          </div>
+
+          <div id="diary-unlocked-view">
+            <div class="card">
+              <h3 style="font-size:15px;margin-bottom:8px;">📝 Ghi lại cảm xúc hôm nay của cậu</h3>
+              <div id="diary-mood-picker" class="mood-row" style="margin-bottom:12px;">
+                <button class="mood-btn selected" data-score="5" onclick="selectDiaryMood(5, '🤩', 'Hào hứng')"><span class="emoji">🤩</span><span class="label">Hào hứng</span></button>
+                <button class="mood-btn" data-score="4" onclick="selectDiaryMood(4, '😊', 'Vui vẻ')"><span class="emoji">😊</span><span class="label">Vui vẻ</span></button>
+                <button class="mood-btn" data-score="3" onclick="selectDiaryMood(3, '😐', 'Bình thường')"><span class="emoji">😐</span><span class="label">Ổn</span></button>
+                <button class="mood-btn" data-score="2" onclick="selectDiaryMood(2, '😟', 'Lo lắng')"><span class="emoji">😟</span><span class="label">Lo lắng</span></button>
+                <button class="mood-btn" data-score="1" onclick="selectDiaryMood(1, '😢', 'Buồn bã')"><span class="emoji">😢</span><span class="label">Buồn</span></button>
+                <button class="mood-btn" data-score="0" onclick="selectDiaryMood(0, '🤯', 'Áp lực')"><span class="emoji">🤯</span><span class="label">Áp lực</span></button>
+              </div>
+
+              <label style="font-size:12.5px;font-weight:700;">Điều gì tác động đến cảm xúc của cậu nhất?</label>
+              <select id="diary-reason" class="input-field" style="margin-bottom:10px;">
+                <option value="Học tập & Điểm số">📚 Học tập & Điểm số</option>
+                <option value="Kỳ thi chuyển cấp Lớp 10">🎯 Kỳ thi chuyển cấp Lớp 10</option>
+                <option value="Chuyện Bạn bè trên lớp">🤝 Chuyện Bạn bè trên lớp</option>
+                <option value="Gia đình & Bố mẹ">🏠 Gia đình & Bố mẹ</option>
+                <option value="Rung động tuổi học trò">💓 Rung động tuổi học trò</option>
+                <option value="Sức khỏe & Tuổi dậy thì">🌱 Sức khỏe & Tuổi dậy thì</option>
+              </select>
+
+              <label style="font-size:12.5px;font-weight:700;">Dòng tâm sự riêng tư (Chỉ lưu trên máy của cậu):</label>
+              <textarea id="diary-note" rows="3" class="textarea-field" placeholder="Hôm nay có chuyện gì làm cậu vui hay suy nghĩ thế?..."></textarea>
+
+              <button class="btn-primary" style="width:100%;margin-top:12px;" onclick="saveMoodEntry()">💾 Lưu vào Nhật ký Cảm xúc</button>
+            </div>
+
+            <div class="card">
+              <h3 style="font-size:15px;margin-bottom:6px;">📊 Biểu đồ Cảm xúc 7 lần gần nhất</h3>
+              <div id="mood-chart-box" class="mood-chart"></div>
+            </div>
+
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <h3 style="font-size:15px;">📖 Lịch sử Nhật ký của cậu</h3>
+                <span style="font-size:11.5px;color:var(--primary);cursor:pointer;font-weight:600;" onclick="openModal('modal-settings')">🔒 Cài mã PIN</span>
+              </div>
+              <div id="mood-history-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-panel 2: Breathing 4-7-8 -->
+        <div id="mood-sub-relax" class="mood-subpanel" style="display:none;">
+          <div class="card breathing-box">
+            <span class="quiz-badge" style="background:rgba(16,185,129,0.15);color:#10b981;">Phương pháp Khoa học Thần kinh</span>
+            <h3 style="font-size:17px;margin-top:6px;">Nhịp thở 4 - 7 - 8 Giảm Căng Thẳng</h3>
+            <p style="font-size:13px;color:var(--text-muted);margin-top:4px;">
+              Giúp làm dịu nhịp tim nhanh chóng khi cậu đang hồi hộp trước giờ kiểm tra, thi vào lớp 10 hoặc khi đang tức giận.
+            </p>
+
+            <div class="breath-circle-wrap">
+              <div id="breath-circle" class="breath-circle">
+                <span id="breath-status-text">Sẵn sàng<br>thư giãn</span>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:10px;max-width:280px;margin:0 auto;">
+              <button id="btn-start-breath" class="btn-primary" onclick="toggleBreathing()">▶️ Bắt đầu Hít thở 4-7-8</button>
+              <button id="btn-ambient-sound" class="btn-secondary" onclick="toggleAmbientSound()">🌧️ Bật tiếng mưa & sóng thư giãn (Offline)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-panel 3: Pomodoro & Worry Box -->
+        <div id="mood-sub-focus" class="mood-subpanel" style="display:none;">
+          <div class="card" style="text-align:center;">
+            <span class="quiz-badge" style="background:rgba(79,70,229,0.12);color:var(--primary);">Tập trung Ôn bài THCS</span>
+            <h3 style="font-size:16.5px;margin-top:6px;">🍅 Đồng hồ Pomodoro Ôn Thi</h3>
+            <p style="font-size:12.5px;color:var(--text-muted);">Học tập trung sâu 25 phút không chạm điện thoại, sau đó nghỉ ngơi 5 phút.</p>
+            <div id="pomo-timer-display" style="font-size:44px;font-weight:800;color:var(--primary);margin:14px 0;font-variant-numeric:tabular-nums;">
+              25:00
+            </div>
+            <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+              <button id="btn-pomo-toggle" class="btn-primary" onclick="togglePomodoro()">▶️ Bắt đầu</button>
+              <button class="btn-secondary" onclick="resetPomodoro(25)">25p Học</button>
+              <button class="btn-secondary" onclick="resetPomodoro(5)">5p Nghỉ</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="font-size:15.5px;margin-bottom:4px;">🌌 Hộp thư "Gửi nỗi buồn vào Vũ trụ"</h3>
+            <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:8px;">
+              Nếu có điều gì làm cậu ấm ức hay mệt mỏi mà không muốn lưu lại, hãy viết ra đây rồi bấm nút để nó tan biến thành bụi sao nhé!
+            </p>
+            <textarea id="worry-box-input" rows="3" class="textarea-field" placeholder="Viết hết những áp lực, bực dọc của cậu vào đây..."></textarea>
+            <button class="btn-primary" style="width:100%;margin-top:10px;background:linear-gradient(135deg,#ec4899,#8b5cf6);" onclick="releaseWorryToUniverse()">
+              ✨ Hóa tan nỗi buồn thành bụi sao
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: QUIZZES & CAREER ORIENTATION -->
+      <section id="tab-quiz" class="tab-panel">
+        <div id="quiz-list-view">
+          <div style="margin-bottom:12px;">
+            <h2 style="font-size:18px;font-weight:800;">🎯 Trắc nghiệm Tâm lý & Định hướng THCS</h2>
+            <p style="font-size:13px;color:var(--text-muted);">Khám phá thế mạnh bản thân, chọn tổ hợp môn Lớp 10 và kiểm tra sức khỏe tinh thần lứa tuổi 13-15.</p>
+          </div>
+          <div id="quiz-cards-container"></div>
+        </div>
+
+        <div id="quiz-play-view" style="display:none;">
+          <div id="quiz-play-content" class="card"></div>
+        </div>
+      </section>
+
+      <!-- TAB 5: HANDBOOK & LIFE SKILLS -->
+      <section id="tab-handbook" class="tab-panel">
+        <div style="margin-bottom:10px;">
+          <h2 style="font-size:18px;font-weight:800;">📖 Cẩm nang & Tình huống Tuổi 13 - 15</h2>
+          <p style="font-size:13px;color:var(--text-muted);">Kỹ năng giải quyết tình huống thực tế dành riêng cho học sinh Lớp 7, Lớp 8, Lớp 9.</p>
+        </div>
+
+        <div id="handbook-filter-bar" class="sub-tabs">
+          <button class="sub-tab-btn active" data-agefilter="all" onclick="filterHandbook('all')">Tất cả</button>
+          <button class="sub-tab-btn" data-agefilter="13" onclick="filterHandbook('13')">Tuổi 13 (L7)</button>
+          <button class="sub-tab-btn" data-agefilter="14" onclick="filterHandbook('14')">Tuổi 14 (L8)</button>
+          <button class="sub-tab-btn" data-agefilter="15" onclick="filterHandbook('15')">Tuổi 15 (L9)</button>
+        </div>
+
+        <div id="handbook-list"></div>
+      </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
+        <span class="nav-icon">🏠</span>
+        <span>Góc của cậu</span>
+      </button>
+      <button class="nav-item" data-tab="chat" onclick="switchTab('chat')">
+        <span class="nav-icon">💬</span>
+        <span>Tư vấn AI</span>
+      </button>
+      <button class="nav-item" data-tab="mood" onclick="switchTab('mood')">
+        <span class="nav-icon">🧘</span>
+        <span>Chữa lành</span>
+      </button>
+      <button class="nav-item" data-tab="quiz" onclick="switchTab('quiz')">
+        <span class="nav-icon">🎯</span>
+        <span>Trắc nghiệm</span>
+      </button>
+      <button class="nav-item" data-tab="handbook" onclick="switchTab('handbook')">
+        <span class="nav-icon">📖</span>
+        <span>Cẩm nang</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MODAL SOS KHẨN CẤP -->
+  <div id="modal-sos" class="modal-backdrop">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3 style="color:#ef4444;">🚨 Hỗ Trợ & Bảo Vệ Khẩn Cấp (SOS)</h3>
+        <button class="btn-secondary" style="padding:4px 10px;" onclick="closeModal('modal-sos')">Đóng</button>
+      </div>
+      <div class="sos-card">
+        <p style="font-size:13.5px;font-weight:700;">Cậu đang gặp nguy hiểm, bị bạo lực học đường, bị đe dọa trên mạng hoặc rơi vào khủng hoảng tâm lý nặng?</p>
+        <p style="font-size:12.5px;margin-top:4px;">Đừng sợ hãi! Hãy bấm gọi ngay các đường dây bảo vệ trẻ em và học sinh hoàn toàn miễn phí dưới đây:</p>
+        <a href="tel:111" class="call-link-btn">
+          <span>📞 Tổng đài Quốc gia Bảo vệ Trẻ em (24/7)</span>
+          <span style="font-size:16px;">Gọi 111</span>
+        </a>
+        <a href="tel:0963061414" class="call-link-btn" style="background:#0284c7;">
+          <span>💙 Đường dây nóng Ngày Mai (Sức khỏe tinh thần)</span>
+          <span>Gọi ngay</span>
+        </a>
+        <a href="mailto:hoangthcsphuhuu@gmail.com?subject=Can%20Ho%20Tro%20Tam%20Ly%20Hoc%20Duong%20-%20THCS%20Phu%20Huu" class="call-link-btn" style="background:#7c3aed;">
+          <span>✉️ Email Tổ Tư vấn THCS Phú Hữu (hoangthcsphuhuu@gmail.com)</span>
+          <span>Gửi thư ➔</span>
+        </a>
+        <div id="trusted-contact-box"></div>
+      </div>
+
+      <div class="card" style="margin-bottom:0;">
+        <h4 style="font-size:14px;margin-bottom:6px;">🛡️ Quy tắc An toàn 3 Bước cho Học sinh THCS:</h4>
+        <ul style="font-size:12.8px;padding-left:18px;line-height:1.55;">
+          <li><strong>Bước 1:</strong> Rời khỏi khu vực nguy hiểm hoặc ngắt kết nối với kẻ đe dọa trên mạng (lưu lại ảnh chụp màn hình làm bằng chứng).</li>
+          <li><strong>Bước 2:</strong> Tìm đến nơi có người lớn đáng tin cậy (Phòng bảo vệ trường, Phòng Tham vấn học đường, Giáo viên chủ nhiệm, Bố mẹ).</li>
+          <li><strong>Bước 3:</strong> Hít thở sâu 4-7-8 và nhớ rằng việc lên tiếng tìm sự giúp đỡ là quyền được bảo vệ hợp pháp của cậu!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CÀI ĐẶT HỒ SƠ & GEMINI AI -->
+  <div id="modal-settings" class="modal-backdrop">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3>⚙️ Hồ Sơ Học Sinh & Cài Đặt AI</h3>
+        <button class="btn-secondary" style="padding:4px 10px;" onclick="closeModal('modal-settings')">Đóng</button>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <label style="font-size:12.5px;font-weight:700;">Tên hoặc Biệt danh của cậu:</label>
+          <input type="text" id="set-student-name" class="input-field" placeholder="VD: Minh Anh, Hoàng, Bạn nhỏ..." />
+        </div>
+
+        <div>
+          <label style="font-size:12.5px;font-weight:700;">Độ tuổi / Khối lớp hiện tại:</label>
+          <select id="set-student-age" class="input-field">
+            <option value="13">🌱 13 Tuổi - Học sinh Lớp 7</option>
+            <option value="14">⚡ 14 Tuổi - Học sinh Lớp 8</option>
+            <option value="15">🎯 15 Tuổi - Học sinh Lớp 9 (Cuối cấp)</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:12.5px;font-weight:700;">Số điện thoại Người thân / GVCN tin cậy (hiện ở nút SOS):</label>
+          <input type="tel" id="set-parent-phone" class="input-field" placeholder="VD: 0912345678" />
+        </div>
+
+        <div>
+          <label style="font-size:12.5px;font-weight:700;">Mã PIN khóa Nhật ký riêng tư (Để trống nếu không khóa):</label>
+          <input type="password" id="set-diary-pin" class="input-field" maxlength="6" placeholder="VD: 1234" />
+        </div>
+
+        <div style="padding:12px;border-radius:12px;background:var(--bg-subtle);border:1px solid var(--border-color);">
+          <label style="font-size:12.5px;font-weight:700;color:var(--primary);">🤖 Khóa kết nối Google Gemini AI (Tùy chọn):</label>
+          <p style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">
+            Ứng dụng đã tích hợp sẵn <strong>Bộ não Tư vấn Tâm lý THCS Offline</strong> hoạt động không cần mạng. Nếu muốn kết nối thêm AI Gemini trực tuyến, hãy nhập API Key tại đây:
+          </p>
+          <input type="password" id="set-gemini-key" class="input-field" placeholder="AIzaSy..." />
+        </div>
+
+        <button class="btn-primary" style="width:100%;" onclick="saveAppSettings()">💾 Lưu Cài Đặt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast-msg" class="toast-msg"></div>
+
+  <!-- Scripts -->
+  <script src="./js/data-knowledge.js"></script>
+  <script src="./js/ai-counselor.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
